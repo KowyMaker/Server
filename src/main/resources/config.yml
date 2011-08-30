@@ -1,0 +1,6 @@
+server:
+  port: 6563
+database:
+  driver: 'org.sqlite.JDBC'
+  user: 'root'
+  password: ''
