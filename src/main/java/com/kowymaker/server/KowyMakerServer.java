@@ -10,13 +10,13 @@ import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
-import com.kokakiwi.utils.Version;
 import com.kowymaker.policyserver.PolicyServer;
 import com.kowymaker.server.console.ServerConsole;
 import com.kowymaker.server.core.Server;
 import com.kowymaker.server.data.Database;
 import com.kowymaker.server.game.Game;
 import com.kowymaker.server.utils.Configuration;
+import com.kowymaker.server.utils.Version;
 
 /**
  * @author Koka El Kiwi
@@ -112,6 +112,8 @@ public class KowyMakerServer
         
         server.start();
         policyServer.start();
+        
+        System.out.println("Server ready for connection!");
     }
     
     public Configuration getConfig()
@@ -143,7 +145,7 @@ public class KowyMakerServer
     {
         return database;
     }
-
+    
     public boolean isRunning()
     {
         return running;

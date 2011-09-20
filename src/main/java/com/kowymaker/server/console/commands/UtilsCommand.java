@@ -12,11 +12,11 @@ public class UtilsCommand extends Command
     @Override
     public void execute(KowyMakerServer main, String[] command)
     {
-        if(command[0].equalsIgnoreCase("threads"))
+        if (command[0].equalsIgnoreCase("threads"))
         {
-            for(Thread thread : Thread.getAllStackTraces().keySet())
+            for (final Thread thread : Thread.getAllStackTraces().keySet())
             {
-                StringBuffer sb = new StringBuffer();
+                final StringBuffer sb = new StringBuffer();
                 sb.append("Thread #");
                 sb.append(thread.getId());
                 sb.append(':');

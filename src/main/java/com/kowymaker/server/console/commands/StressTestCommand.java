@@ -23,8 +23,8 @@ public class StressTestCommand extends Command
     public void execute(KowyMakerServer main, String[] command)
     {
         int num = 100000;
-        Task[] tasks = new Task[num];
-        if (command.length > 0)
+        final Task[] tasks = new Task[num];
+        if (command.length > 1)
         {
             num = Integer.parseInt(command[1]);
         }
@@ -32,6 +32,7 @@ public class StressTestCommand extends Command
         {
             num = 50;
         }
+        System.out.println("Starting Stress Test with " + num + " tasks.");
         final long start = System.currentTimeMillis();
         for (int i = 0; i < num; i++)
         {
@@ -51,18 +52,17 @@ public class StressTestCommand extends Command
         do
         {
             empty = true;
-            for(Task task : tasks)
+            for (final Task task : tasks)
             {
-                if(task != null)
+                if (task != null)
                 {
-                    if(!task.isExecuted())
+                    if (!task.isExecuted())
                     {
                         empty = false;
                     }
                 }
             }
-        }
-        while(!empty);
+        } while (!empty);
         final long end = System.currentTimeMillis();
         
         final long diff = end - start;
@@ -71,7 +71,8 @@ public class StressTestCommand extends Command
         {
             speed = num / diff * 1000;
         }
-        System.out.println("Diff: " + diff + " ms -- Speed: " + speed + " ops");
+        System.out.println("Diff: " + diff + " ms -- Speed: " + speed
+                + " ops/s");
     }
     
 }

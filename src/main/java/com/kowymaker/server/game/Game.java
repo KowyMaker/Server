@@ -15,7 +15,7 @@ public class Game
     public Game(KowyMakerServer main)
     {
         this.main = main;
-        this.players = new Players(this);
+        players = new Players(this);
     }
     
     public KowyMakerServer getMain()
@@ -32,10 +32,10 @@ public class Game
     {
         return gameDir;
     }
-
+    
     public void init()
     {
-        if(!gameDir.exists())
+        if (!gameDir.exists())
         {
             gameDir.mkdirs();
         }

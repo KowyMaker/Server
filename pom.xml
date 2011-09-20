@@ -28,11 +28,6 @@
 			<version>3.3</version>
 		</dependency>
 		<dependency>
-			<groupId>com.kokakiwi.utils</groupId>
-			<artifactId>kiwi-utils</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
 			<version>1.8</version>

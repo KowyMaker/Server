@@ -4,3 +4,4 @@ database:
   driver: 'org.sqlite.JDBC'
   user: 'root'
   password: ''
+  url: 'jdbc:sqlite:game/database.db'

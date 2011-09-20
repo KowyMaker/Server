@@ -18,7 +18,7 @@ public class TaskExecutor implements Runnable
                     task.getEvent());
             task.setExecuted(true);
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             e.printStackTrace();
         }

@@ -3,6 +3,7 @@ package com.kowymaker.server.console.commands;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class CommandResolver
 {
@@ -37,5 +38,10 @@ public class CommandResolver
     public static <T extends Command> T getCommand(String command)
     {
         return (T) commands.get(command);
+    }
+    
+    public static Set<String> getCommands()
+    {
+        return commands.keySet();
     }
 }

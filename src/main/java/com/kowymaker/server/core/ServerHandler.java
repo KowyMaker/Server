@@ -12,6 +12,7 @@ import com.kowymaker.server.core.net.codec.CodecResolver;
 import com.kowymaker.server.core.net.handlers.MessageHandler;
 import com.kowymaker.server.core.net.msg.Message;
 import com.kowymaker.server.core.tasks.Task;
+import com.kowymaker.server.game.players.Player;
 
 public class ServerHandler extends SimpleChannelUpstreamHandler
 {
@@ -55,6 +56,14 @@ public class ServerHandler extends SimpleChannelUpstreamHandler
             ChannelStateEvent e) throws Exception
     {
         server.getChannels().remove(e.getChannel());
+        
+        final Player attached = server.getMain().getGame().getPlayers()
+                .get(e.getChannel());
+        
+        if (attached != null)
+        {
+            server.getMain().getGame().getPlayers().remove(attached);
+        }
     }
     
     @Override

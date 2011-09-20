@@ -36,7 +36,8 @@ public class ServerDecoder extends OneToOneDecoder
             
             if (codec == null)
             {
-                System.err.println("Error. Unrecognized opcode '" + opcode + "' : " + message);
+                System.err.println("Error. Unrecognized opcode '" + opcode
+                        + "' : " + message);
                 return null;
             }
             
