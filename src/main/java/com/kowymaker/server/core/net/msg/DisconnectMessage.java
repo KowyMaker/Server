@@ -1,5 +1,7 @@
 package com.kowymaker.server.core.net.msg;
 
+import com.kowymaker.server.game.players.Player;
+
 public class DisconnectMessage extends Message
 {
     private String player;
@@ -12,5 +14,10 @@ public class DisconnectMessage extends Message
     public void setPlayer(String player)
     {
         this.player = player;
+    }
+    
+    public void setPlayer(Player player)
+    {
+        this.player = player.getName();
     }
 }

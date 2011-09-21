@@ -15,7 +15,11 @@ public class ChatHandler extends MessageHandler<ChatMessage>
             MessageEvent e, ChatMessage msg) throws Exception
     {
         String message = msg.getMessage();
-        if(!message.startsWith("/"))
+        if(message.startsWith("/"))
+        {
+            //Execute a command
+        }
+        else
         {
             Player player = server.getMain().getGame().getPlayers().get(e.getChannel());
             for(Player p : player.getMap().getPlayers())
@@ -25,10 +29,6 @@ public class ChatHandler extends MessageHandler<ChatMessage>
                     p.sendMessage(msg);
                 }
             }
-        }
-        else
-        {
-            //Execute a command
         }
         return true;
     }

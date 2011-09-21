@@ -5,9 +5,10 @@ import org.jboss.netty.channel.Channel;
 import com.kowymaker.server.core.net.msg.ChatMessage;
 import com.kowymaker.server.core.net.msg.Message;
 import com.kowymaker.server.game.map.Map;
+import com.kowymaker.server.interfaces.CommandSender;
 import com.kowymaker.server.utils.Location;
 
-public class Player
+public class Player implements CommandSender
 {
     private final Channel channel;
     private String        name = null;

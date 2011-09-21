@@ -1,4 +1,4 @@
-package com.kowymaker.server.console.commands;
+package com.kowymaker.server.commands;
 
 import java.net.InetSocketAddress;
 
@@ -6,33 +6,44 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.UpstreamMessageEvent;
 
 import com.kowymaker.server.KowyMakerServer;
+import com.kowymaker.server.annotations.Command;
+import com.kowymaker.server.console.ServerConsole;
 import com.kowymaker.server.core.net.codec.CodecResolver;
 import com.kowymaker.server.core.net.handlers.MessageHandler;
 import com.kowymaker.server.core.net.msg.DisconnectMessage;
 import com.kowymaker.server.core.tasks.Task;
+import com.kowymaker.server.interfaces.CommandSender;
 
-public class StressTestCommand extends Command
+public class BasicCommands
 {
-    public StressTestCommand()
+    @Command(aliases = { "stop", "quit" }, max = 0, desc = "Stop the server")
+    public static boolean stop(KowyMakerServer main, CommandContext command,
+            CommandSender sender)
     {
-        super("stress");
+        if (sender instanceof ServerConsole)
+        {
+            main.shutdown();
+            return true;
+        }
+        return false;
     }
     
     @SuppressWarnings("unchecked")
-    @Override
-    public void execute(KowyMakerServer main, String[] command)
+    @Command(aliases = { "stress" }, desc = "Execute a stress test to determine server speed", max = 1, usage = "/<command> [num of tasks]")
+    public static boolean stress(KowyMakerServer main, CommandContext command,
+            CommandSender sender)
     {
         int num = 100000;
         final Task[] tasks = new Task[num];
-        if (command.length > 1)
+        if (command.argsLength() > 0)
         {
-            num = Integer.parseInt(command[1]);
+            num = command.getInteger(0);
         }
         if (num < 50)
         {
             num = 50;
         }
-        System.out.println("Starting Stress Test with " + num + " tasks.");
+        sender.sendMessage("Starting Stress Test with " + num + " tasks.");
         final long start = System.currentTimeMillis();
         for (int i = 0; i < num; i++)
         {
@@ -71,8 +82,8 @@ public class StressTestCommand extends Command
         {
             speed = num / diff * 1000;
         }
-        System.out.println("Diff: " + diff + " ms -- Speed: " + speed
+        sender.sendMessage("Diff: " + diff + " ms -- Speed: " + speed
                 + " ops/s");
+        return true;
     }
-    
 }

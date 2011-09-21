@@ -11,6 +11,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
 import com.kowymaker.policyserver.PolicyServer;
+import com.kowymaker.server.commands.CommandsManager;
 import com.kowymaker.server.console.ServerConsole;
 import com.kowymaker.server.core.Server;
 import com.kowymaker.server.data.Database;
@@ -31,6 +32,7 @@ public class KowyMakerServer
     private ServerConsole       console;
     private Game                game;
     private Database            database;
+    private CommandsManager     commandsManager;
     private boolean             running     = true;
     
     public KowyMakerServer(String[] args)
@@ -97,6 +99,7 @@ public class KowyMakerServer
     public void init() throws Exception
     {
         console = new ServerConsole(this);
+        commandsManager = new CommandsManager(this);
         
         System.out
                 .println("Starting Kowy Maker Server v" + APP_VERSION + "...");
@@ -146,6 +149,16 @@ public class KowyMakerServer
         return database;
     }
     
+    public CommandsManager getCommandsManager()
+    {
+        return commandsManager;
+    }
+
+    public void setCommandsManager(CommandsManager commandsManager)
+    {
+        this.commandsManager = commandsManager;
+    }
+
     public boolean isRunning()
     {
         return running;

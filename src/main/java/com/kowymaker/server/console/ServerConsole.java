@@ -10,10 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.kowymaker.server.KowyMakerServer;
-import com.kowymaker.server.console.commands.Command;
-import com.kowymaker.server.console.commands.CommandResolver;
+import com.kowymaker.server.interfaces.CommandSender;
 
-public class ServerConsole
+public class ServerConsole implements CommandSender
 {
     private final KowyMakerServer    main;
     private final Logger             global    = Logger.getLogger("");
@@ -64,11 +63,12 @@ public class ServerConsole
     
     public void handle(String commandCode)
     {
-        final String[] c = commandCode.split(" ");
-        final Command command = CommandResolver.getCommand(c[0]);
-        if (command != null)
-        {
-            command.execute(main, c);
-        }
+        main.getCommandsManager().execute(this, commandCode);
+    }
+
+    @Override
+    public void sendMessage(String message)
+    {
+        System.out.println(message);
     }
 }
