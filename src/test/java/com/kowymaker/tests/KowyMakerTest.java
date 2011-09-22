@@ -1,6 +1,5 @@
 package com.kowymaker.tests;
 
-
 public class KowyMakerTest
 {
     public KowyMakerTest()

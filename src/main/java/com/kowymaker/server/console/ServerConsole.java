@@ -65,7 +65,7 @@ public class ServerConsole implements CommandSender
     {
         main.getCommandsManager().execute(this, commandCode);
     }
-
+    
     @Override
     public void sendMessage(String message)
     {

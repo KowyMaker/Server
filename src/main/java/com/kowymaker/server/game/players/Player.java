@@ -4,15 +4,16 @@ import org.jboss.netty.channel.Channel;
 
 import com.kowymaker.server.core.net.msg.ChatMessage;
 import com.kowymaker.server.core.net.msg.Message;
+import com.kowymaker.server.data.Mergeable;
 import com.kowymaker.server.game.map.Map;
 import com.kowymaker.server.interfaces.CommandSender;
 import com.kowymaker.server.utils.Location;
 
-public class Player implements CommandSender
+public class Player implements CommandSender, Mergeable<com.kowymaker.server.data.classes.Player>
 {
     private final Channel channel;
     private String        name = null;
-    private Location      location;
+    private Location      location = new Location();
     private Map           map;
     
     public Player(Channel channel)
@@ -45,11 +46,22 @@ public class Player implements CommandSender
         return map;
     }
     
+    public void setLocation(Location location)
+    {
+        this.location = location;
+    }
+
+    public void setMap(Map map)
+    {
+        this.map = map;
+    }
+
     public void sendMessage(Message msg)
     {
         channel.write(msg);
     }
     
+    @Override
     public void sendMessage(String message)
     {
         final ChatMessage msg = new ChatMessage();
@@ -97,5 +109,11 @@ public class Player implements CommandSender
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void merge(com.kowymaker.server.data.classes.Player data)
+    {
+        
     }
 }

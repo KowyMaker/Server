@@ -1,5 +1,7 @@
 package com.kowymaker.server.core.net.handlers;
 
+import java.util.List;
+
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
 
@@ -16,6 +18,16 @@ public class ConnectHandler extends MessageHandler<ConnectMessage>
     {
         final Player player = new Player(e.getChannel());
         player.setName(msg.getName());
+        
+        List<com.kowymaker.server.data.classes.Player> datas = server.getMain().getDatabase().query(com.kowymaker.server.data.classes.Player.class).where().eq("name", msg.getName()).findList();
+        if(datas.isEmpty())
+        {
+            server.getMain().getGame().getMaps().getMap().spawn(player);
+        }
+        else
+        {
+            player.merge(datas.get(0));
+        }
         
         server.getMain().getGame().getPlayers().add(player);
         

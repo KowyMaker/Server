@@ -12,6 +12,7 @@ import com.kowymaker.server.core.net.codec.CodecResolver;
 import com.kowymaker.server.core.net.handlers.MessageHandler;
 import com.kowymaker.server.core.net.msg.DisconnectMessage;
 import com.kowymaker.server.core.tasks.Task;
+import com.kowymaker.server.game.players.Player;
 import com.kowymaker.server.interfaces.CommandSender;
 
 public class BasicCommands
@@ -84,6 +85,18 @@ public class BasicCommands
         }
         sender.sendMessage("Diff: " + diff + " ms -- Speed: " + speed
                 + " ops/s");
+        return true;
+    }
+    
+    @Command(aliases = { "say" }, min = 1, desc = "Send a message to all players", usage = "/<command> [message]")
+    public static boolean say(KowyMakerServer main, CommandContext command,
+            CommandSender sender)
+    {
+        for (final Player player : main.getGame().getPlayers().getPlayers()
+                .values())
+        {
+            player.sendMessage(command.getJoinedString(0));
+        }
         return true;
     }
 }

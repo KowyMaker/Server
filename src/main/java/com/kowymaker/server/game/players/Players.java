@@ -46,4 +46,9 @@ public class Players
         
         return p;
     }
+    
+    public Map<String, Player> getPlayers()
+    {
+        return players;
+    }
 }

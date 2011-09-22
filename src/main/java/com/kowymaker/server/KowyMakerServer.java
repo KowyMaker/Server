@@ -98,21 +98,31 @@ public class KowyMakerServer
     
     public void init() throws Exception
     {
-        console = new ServerConsole(this);
-        commandsManager = new CommandsManager(this);
-        
         System.out
                 .println("Starting Kowy Maker Server v" + APP_VERSION + "...");
         
+        //Initialize contents
+        console = new ServerConsole(this);
+        commandsManager = new CommandsManager(this);
+        database = new Database(this);
+        game = new Game(this);
         server = new Server(this);
         policyServer = new PolicyServer(config.getInteger("server.port") + 1);
         
-        database = new Database(this);
-        database.setup();
+        //Init Database
+        database.registerSource(game);
         
-        game = new Game(this);
+        database.setup();
+        if(!database.isDatabaseCreated())
+        {
+            database.createDatabase();
+        }
+        database.load();
+        
+        //Init Game Handler
         game.init();
         
+        //Start servers
         server.start();
         policyServer.start();
         
@@ -153,12 +163,7 @@ public class KowyMakerServer
     {
         return commandsManager;
     }
-
-    public void setCommandsManager(CommandsManager commandsManager)
-    {
-        this.commandsManager = commandsManager;
-    }
-
+    
     public boolean isRunning()
     {
         return running;

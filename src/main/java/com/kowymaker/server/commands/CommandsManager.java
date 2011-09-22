@@ -24,7 +24,7 @@ public class CommandsManager
     
     public void register(Class<?> clazz)
     {
-        for (Method method : clazz.getMethods())
+        for (final Method method : clazz.getMethods())
         {
             if (Modifier.isStatic(method.getModifiers())
                     && (method.getReturnType() == Boolean.class || method
@@ -32,8 +32,8 @@ public class CommandsManager
             {
                 if (method.isAnnotationPresent(Command.class))
                 {
-                    Command command = method.getAnnotation(Command.class);
-                    for (String alias : command.aliases())
+                    final Command command = method.getAnnotation(Command.class);
+                    for (final String alias : command.aliases())
                     {
                         System.out.println("Register command " + alias + " ("
                                 + method.getName() + ")");
@@ -52,33 +52,34 @@ public class CommandsManager
             command = command.substring(1);
         }
         
-        String[] args = command.split(" ");
-        CommandContext context = new CommandContext(args);
-        Method method = aliases.get(context.getName());
+        final String[] args = command.split(" ");
+        final CommandContext context = new CommandContext(args);
+        final Method method = aliases.get(context.getName());
         if (method != null)
         {
             if (method.isAnnotationPresent(Command.class))
             {
-                Command cmd = method.getAnnotation(Command.class);
+                final Command cmd = method.getAnnotation(Command.class);
                 if (context.argsLength() >= cmd.min()
                         && (context.argsLength() <= cmd.max() || cmd.max() == -1))
                 {
                     try
                     {
-                        boolean result = (Boolean) method.invoke(null, main,
-                                context, sender);
+                        final boolean result = (Boolean) method.invoke(null,
+                                main, context, sender);
                         if (result)
                         {
                             return true;
                         }
                     }
-                    catch (Exception e)
+                    catch (final Exception e)
                     {
                         e.printStackTrace();
                     }
                 }
                 
-                sender.sendMessage("Usage: " + cmd.usage().replace("<command>", context.getName()));
+                sender.sendMessage("Usage: "
+                        + cmd.usage().replace("<command>", context.getName()));
             }
         }
         return false;

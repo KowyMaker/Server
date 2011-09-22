@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.EbeanServerFactory;
+import com.avaje.ebean.Query;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebean.config.dbplatform.SQLitePlatform;
@@ -12,12 +13,14 @@ import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
 import com.kowymaker.server.KowyMakerServer;
+import com.kowymaker.server.data.sources.DataSource;
 
 public class Database
 {
-    private final KowyMakerServer server;
-    private EbeanServer           ebean;
-    private final List<Class<?>>  classes = new ArrayList<Class<?>>();
+    private final KowyMakerServer  server;
+    private EbeanServer            ebean;
+    private final List<Class<?>>   classes = new ArrayList<Class<?>>();
+    private final List<DataSource> sources = new ArrayList<DataSource>();
     
     public Database(KowyMakerServer server)
     {
@@ -28,6 +31,7 @@ public class Database
     {
         System.out.println("Setting up database...");
         
+        // Register basic classes
         DataManager.registerClasses(classes);
         
         final ServerConfig db = new ServerConfig();
@@ -54,11 +58,48 @@ public class Database
         
         ebean = EbeanServerFactory.create(db);
         
+        System.out.println("Database ready for ops!");
+    }
+    
+    public void createDatabase()
+    {
+        
         final SpiEbeanServer serv = (SpiEbeanServer) ebean;
         final DdlGenerator gen = serv.getDdlGenerator();
         gen.runScript(false, gen.generateCreateDdl());
         
-        System.out.println("Database ready for ops!");
+        System.out.println("Database created!");
+    }
+    
+    public boolean isDatabaseCreated()
+    {
+        final SpiEbeanServer serv = (SpiEbeanServer) ebean;
+        try
+        {
+            if(!classes.isEmpty())
+            {
+                serv.find(classes.get(0)).findRowCount();
+            }
+            return true;
+        }
+        catch (Exception e)
+        {
+            
+        }
+        
+        return false;
+    }
+    
+    public void load()
+    {
+        System.out.println("Loading database...");
+        
+        for (final DataSource source : sources)
+        {
+            source.loadDatabase();
+        }
+        
+        System.out.println("Database loaded!");
     }
     
     public KowyMakerServer getServer()
@@ -82,5 +123,33 @@ public class Database
         {
             classes.add(clazz);
         }
+    }
+    
+    public void registerSource(DataSource source)
+    {
+        if (!sources.contains(source))
+        {
+            sources.add(source);
+        }
+    }
+    
+    public <T> Query<T> query(Class<T> clazz)
+    {
+        return ebean.find(clazz);
+    }
+    
+    public <T> List<T> select(Class<T> clazz)
+    {
+        return select(clazz, "*");
+    }
+    
+    public <T> List<T> select(Class<T> clazz, String columns)
+    {
+        return ebean.find(clazz).select(columns).findList();
+    }
+    
+    public void save(Object o)
+    {
+        ebean.save(o);
     }
 }

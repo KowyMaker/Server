@@ -14,17 +14,18 @@ public class ChatHandler extends MessageHandler<ChatMessage>
     public boolean handle(Server server, ChannelHandlerContext ctx,
             MessageEvent e, ChatMessage msg) throws Exception
     {
-        String message = msg.getMessage();
-        if(message.startsWith("/"))
+        final String message = msg.getMessage();
+        final Player player = server.getMain().getGame().getPlayers()
+                .get(e.getChannel());
+        if (message.startsWith("/"))
         {
-            //Execute a command
+            server.getMain().getCommandsManager().execute(player, message);
         }
         else
         {
-            Player player = server.getMain().getGame().getPlayers().get(e.getChannel());
-            for(Player p : player.getMap().getPlayers())
+            for (final Player p : player.getMap().getPlayers())
             {
-                if(!p.equals(player))
+                if (!p.equals(player))
                 {
                     p.sendMessage(msg);
                 }

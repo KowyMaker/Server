@@ -1,6 +1,7 @@
 package com.kowymaker.server.game.map;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.kowymaker.server.core.net.msg.Message;
 import com.kowymaker.server.game.players.Player;
@@ -18,7 +19,7 @@ public class Map
     {
         this.width = width;
         this.height = height;
-        this.cases = new Case[width][height];
+        cases = new Case[width][height];
     }
     
     public Location getLocation()
@@ -63,7 +64,7 @@ public class Map
     
     public void sendMessage(Message msg)
     {
-        for (Player player : players)
+        for (final Player player : players)
         {
             player.sendMessage(msg);
         }
@@ -71,9 +72,15 @@ public class Map
     
     public void sendMessage(String messsage)
     {
-        for (Player player : players)
+        for (final Player player : players)
         {
             player.sendMessage(messsage);
         }
+    }
+    
+    public void spawn(Player player)
+    {
+        player.getLocation().set(1, 1);
+        player.setMap(this);
     }
 }

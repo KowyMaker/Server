@@ -34,6 +34,18 @@ public class Location
         this.orientation = orientation;
     }
     
+    public void set(int x, int y)
+    {
+        set(x, y, z);
+    }
+    
+    public void set(int x, int y, int z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    
     public int getX()
     {
         return x;
@@ -150,7 +162,7 @@ public class Location
     
     public static boolean verfifyCoords(int x, int y)
     {
-        if((x + y) % 2 == 0)
+        if ((x + y) % 2 == 0)
         {
             return true;
         }

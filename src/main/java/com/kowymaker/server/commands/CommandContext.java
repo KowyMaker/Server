@@ -31,6 +31,33 @@ public class CommandContext
         return null;
     }
     
+    public String getJoinedString(int start)
+    {
+        return getJoinedString(start, args.length - 1);
+    }
+    
+    public String getJoinedString(int start, int end)
+    {
+        final StringBuffer sb = new StringBuffer();
+        sb.append(args[start]);
+        
+        if (end < 0)
+        {
+            end = args.length - end - 1;
+        }
+        
+        if (end - start > 0)
+        {
+            for (int i = start + 1; i <= end; i++)
+            {
+                sb.append(' ');
+                sb.append(args[i]);
+            }
+        }
+        
+        return sb.toString();
+    }
+    
     public int getInteger(int index)
     {
         if (index < args.length && index >= 0)
@@ -43,12 +70,19 @@ public class CommandContext
     
     public boolean getBoolean(int index)
     {
-        if(index < args.length && index >= 0)
+        boolean value = false;
+        
+        if (index < args.length && index >= 0)
         {
-            return Boolean.parseBoolean(args[index]);
+            final String str = args[index];
+            if (str.equalsIgnoreCase("true") || str.equalsIgnoreCase("yes")
+                    || str.equalsIgnoreCase("1"))
+            {
+                value = true;
+            }
         }
         
-        return false;
+        return value;
     }
     
     public int argsLength()
