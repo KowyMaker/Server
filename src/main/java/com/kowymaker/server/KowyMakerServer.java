@@ -1,5 +1,17 @@
 /**
+ * This file is part of Kowy Maker.
  * 
+ * Kowy Maker is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * Kowy Maker is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * Kowy Maker. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.kowymaker.server;
 
@@ -10,7 +22,6 @@ import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
-import com.kowymaker.policyserver.PolicyServer;
 import com.kowymaker.server.commands.CommandsManager;
 import com.kowymaker.server.console.ServerConsole;
 import com.kowymaker.server.core.Server;
@@ -28,13 +39,17 @@ public class KowyMakerServer
     public static final Version APP_VERSION = new Version(0, 1, 0);
     private final Configuration config      = new Configuration();
     private Server              server;
-    private PolicyServer        policyServer;
     private ServerConsole       console;
     private Game                game;
     private Database            database;
     private CommandsManager     commandsManager;
     private boolean             running     = true;
     
+    /**
+     * Initialize configuration and parse args.
+     * 
+     * @param args
+     */
     public KowyMakerServer(String[] args)
     {
         final OptionParser parser = new OptionParser() {
@@ -96,89 +111,130 @@ public class KowyMakerServer
         }
     }
     
+    /**
+     * Initialize variables and start the server.
+     * 
+     * @throws Exception
+     */
     public void init() throws Exception
     {
         System.out
                 .println("Starting Kowy Maker Server v" + APP_VERSION + "...");
         
-        //Initialize contents
+        // Initialize contents
         console = new ServerConsole(this);
         commandsManager = new CommandsManager(this);
         database = new Database(this);
         game = new Game(this);
         server = new Server(this);
-        policyServer = new PolicyServer(config.getInteger("server.port") + 1);
         
-        //Init Database
+        // Init Database
         database.registerSource(game);
         
         database.setup();
-        if(!database.isDatabaseCreated())
+        if (!database.isDatabaseCreated())
         {
             database.createDatabase();
         }
         database.load();
         
-        //Init Game Handler
+        // Init Game Handler
         game.init();
         
-        //Start servers
+        // Start servers
         server.start();
-        policyServer.start();
         
         System.out.println("Server ready for connection!");
     }
     
+    /**
+     * Get the server configuration.
+     * 
+     * @return Server configuration
+     */
     public Configuration getConfig()
     {
         return config;
     }
     
+    /**
+     * Get the connections server.
+     * 
+     * @return Connections server
+     */
     public Server getServer()
     {
         return server;
     }
     
-    public PolicyServer getPolicyServer()
-    {
-        return policyServer;
-    }
-    
+    /**
+     * Get console manager.
+     * 
+     * @return Console manager
+     */
     public ServerConsole getConsole()
     {
         return console;
     }
     
+    /**
+     * Get game manager.
+     * 
+     * @return Game manager
+     */
     public Game getGame()
     {
         return game;
     }
     
+    /**
+     * Get server database.
+     * 
+     * @return Server database
+     */
     public Database getDatabase()
     {
         return database;
     }
     
+    /**
+     * Get commands manager.
+     * 
+     * @return Commands manager
+     */
     public CommandsManager getCommandsManager()
     {
         return commandsManager;
     }
     
+    /**
+     * Verify if the server is running
+     * 
+     * @return true if the server is currently running else false
+     */
     public boolean isRunning()
     {
         return running;
     }
     
+    /**
+     * Set the server running
+     * 
+     * @param running
+     *            true or false.
+     */
     public void setRunning(boolean running)
     {
         this.running = running;
     }
     
+    /**
+     * Shutdown the server
+     */
     public void shutdown()
     {
         System.out.println("Server is shutting down...");
         running = false;
-        policyServer.setListening(false);
         server.stop();
         System.exit(0);
     }

@@ -1,10 +1,22 @@
 package com.kowymaker.server.commands;
 
+/**
+ * Determine all commands parameters (Command name, command arguments, etc...)
+ * 
+ * @author Koka El Kiwi
+ * 
+ */
 public class CommandContext
 {
     private final String   name;
     private final String[] args;
     
+    /**
+     * Constructor of command context, based on command splitted by ' ' char.
+     * 
+     * @param args
+     *            Command splitted by ' ' char.
+     */
     public CommandContext(String[] args)
     {
         name = args[0];
@@ -15,11 +27,20 @@ public class CommandContext
         }
     }
     
+    /**
+     * Get command name.
+     * @return Command name
+     */
     public String getName()
     {
         return name;
     }
     
+    /**
+     * Get String argument based on index.
+     * @param index Index of argument (start is 0)
+     * @return String argument
+     */
     public String getString(int index)
     {
         
@@ -31,11 +52,22 @@ public class CommandContext
         return null;
     }
     
+    /**
+     * Get a joined String based on all args that's starting at a specified index.
+     * @param start Index of start argument.
+     * @return Joined String arguments.
+     */
     public String getJoinedString(int start)
     {
         return getJoinedString(start, args.length - 1);
     }
     
+    /**
+     * 
+     * @param start
+     * @param end
+     * @return
+     */
     public String getJoinedString(int start, int end)
     {
         final StringBuffer sb = new StringBuffer();

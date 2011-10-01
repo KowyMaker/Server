@@ -1,3 +1,18 @@
+/**
+ * This file is part of Kowy Maker.
+ * 
+ * Kowy Maker is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * Kowy Maker is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * Kowy Maker. If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.kowymaker.server.game.players;
 
 import org.jboss.netty.channel.Channel;
@@ -9,10 +24,11 @@ import com.kowymaker.server.game.map.Map;
 import com.kowymaker.server.interfaces.CommandSender;
 import com.kowymaker.server.utils.Location;
 
-public class Player implements CommandSender, Mergeable<com.kowymaker.server.data.classes.Player>
+public class Player implements CommandSender,
+        Mergeable<com.kowymaker.server.data.classes.Player>
 {
     private final Channel channel;
-    private String        name = null;
+    private String        name     = null;
     private Location      location = new Location();
     private Map           map;
     
@@ -50,12 +66,12 @@ public class Player implements CommandSender, Mergeable<com.kowymaker.server.dat
     {
         this.location = location;
     }
-
+    
     public void setMap(Map map)
     {
         this.map = map;
     }
-
+    
     public void sendMessage(Message msg)
     {
         channel.write(msg);
@@ -110,7 +126,7 @@ public class Player implements CommandSender, Mergeable<com.kowymaker.server.dat
         }
         return true;
     }
-
+    
     @Override
     public void merge(com.kowymaker.server.data.classes.Player data)
     {

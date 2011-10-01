@@ -1,3 +1,18 @@
+/**
+ * This file is part of Kowy Maker.
+ * 
+ * Kowy Maker is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * Kowy Maker is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * Kowy Maker. If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.kowymaker.server.console;
 
 import java.io.File;
@@ -16,6 +31,8 @@ public class ServerConsole implements CommandSender
 {
     private final KowyMakerServer    main;
     private final Logger             global    = Logger.getLogger("");
+    
+    public static final DebugLevel   DEBUG     = new DebugLevel();
     
     private final LoggerOutputStream outStream = new LoggerOutputStream(global,
                                                        Level.INFO);
@@ -43,7 +60,7 @@ public class ServerConsole implements CommandSender
             
             final File logFile = new File("server.log");
             final FileHandler fileHandler = new FileHandler(
-                    logFile.getAbsolutePath(), true);
+                    logFile.getAbsolutePath(), 500000, 5, true);
             fileHandler.setFormatter(new LogFormatter());
             global.addHandler(fileHandler);
             
@@ -70,5 +87,16 @@ public class ServerConsole implements CommandSender
     public void sendMessage(String message)
     {
         System.out.println(message);
+    }
+    
+    public static class DebugLevel extends Level
+    {
+        private static final long serialVersionUID = 4164250706426396472L;
+        
+        protected DebugLevel()
+        {
+            super("DEBUG", Level.INFO.intValue() + 53);
+        }
+        
     }
 }

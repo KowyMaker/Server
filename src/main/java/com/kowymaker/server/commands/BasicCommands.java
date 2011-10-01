@@ -15,6 +15,13 @@ import com.kowymaker.server.core.tasks.Task;
 import com.kowymaker.server.game.players.Player;
 import com.kowymaker.server.interfaces.CommandSender;
 
+/**
+ * Basics commands for the server: stop, say and stress (others will be
+ * available)
+ * 
+ * @author Koka El Kiwi
+ * 
+ */
 public class BasicCommands
 {
     @Command(aliases = { "stop", "quit" }, max = 0, desc = "Stop the server")
@@ -30,7 +37,7 @@ public class BasicCommands
     }
     
     @SuppressWarnings("unchecked")
-    @Command(aliases = { "stress" }, desc = "Execute a stress test to determine server speed", max = 1, usage = "/<command> [num of tasks]")
+    @Command(aliases = { "stress" }, desc = "Execute a stress test to determine server tasks executing speed", max = 1, usage = "/<command> [num of tasks]")
     public static boolean stress(KowyMakerServer main, CommandContext command,
             CommandSender sender)
     {
