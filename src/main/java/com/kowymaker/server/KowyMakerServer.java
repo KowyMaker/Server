@@ -27,8 +27,8 @@ import com.kowymaker.server.console.ServerConsole;
 import com.kowymaker.server.core.Server;
 import com.kowymaker.server.data.Database;
 import com.kowymaker.server.game.Game;
-import com.kowymaker.server.utils.Configuration;
-import com.kowymaker.server.utils.Version;
+import com.kowymaker.spec.utils.Configuration;
+import com.kowymaker.spec.utils.Version;
 
 /**
  * @author Koka El Kiwi

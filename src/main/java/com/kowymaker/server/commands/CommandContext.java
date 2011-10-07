@@ -63,10 +63,10 @@ public class CommandContext
     }
     
     /**
-     * 
-     * @param start
-     * @param end
-     * @return
+     * Get a joined String based on all args that's starting at a specified index and ending at an other index.
+     * @param start Index of start argument.
+     * @param end End of start argument.
+     * @return Joined String arguments.
      */
     public String getJoinedString(int start, int end)
     {
@@ -90,6 +90,11 @@ public class CommandContext
         return sb.toString();
     }
     
+    /**
+     * Get an Integer argument at specified index.
+     * @param index Argument index
+     * @return Integer argument. 0 if the index is not in range.
+     */
     public int getInteger(int index)
     {
         if (index < args.length && index >= 0)
@@ -100,6 +105,11 @@ public class CommandContext
         return 0;
     }
     
+    /**
+     * Get a Boolean argument at specified index
+     * @param index Argument index
+     * @return Boolean argument. false is the index is not in range.
+     */
     public boolean getBoolean(int index)
     {
         boolean value = false;
@@ -117,6 +127,10 @@ public class CommandContext
         return value;
     }
     
+    /**
+     * Get number of arguments passed to this command.
+     * @return Number of arguments passed to the command
+     */
     public int argsLength()
     {
         return args.length;
