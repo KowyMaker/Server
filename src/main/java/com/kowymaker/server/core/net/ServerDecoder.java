@@ -15,21 +15,15 @@
  */
 package com.kowymaker.server.core.net;
 
-import java.io.StringReader;
-import java.nio.charset.Charset;
-
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
-
-import com.kowymaker.server.core.net.codec.CodecResolver;
-import com.kowymaker.server.core.net.codec.MessageCodec;
-import com.kowymaker.server.core.net.handlers.MessageHandler;
-import com.kowymaker.server.core.net.msg.Message;
+import com.kowymaker.spec.net.CodecResolver;
+import com.kowymaker.spec.net.codec.MessageCodec;
+import com.kowymaker.spec.net.msg.Message;
+import com.kowymaker.spec.utils.data.DataBuffer;
+import com.kowymaker.spec.utils.data.DynamicDataBuffer;
 
 public class ServerDecoder extends OneToOneDecoder
 {
@@ -40,23 +34,22 @@ public class ServerDecoder extends OneToOneDecoder
     {
         if (msg instanceof ChannelBuffer)
         {
-            final ChannelBuffer buf = (ChannelBuffer) msg;
-            final String message = buf.toString(Charset.defaultCharset());
-            final SAXBuilder sxb = new SAXBuilder();
-            final Document document = sxb.build(new StringReader(message));
-            final Element root = document.getRootElement();
-            final String opcode = root.getName();
-            final MessageCodec<? extends Message, ? extends MessageHandler<? extends Message>> codec = CodecResolver
+            DataBuffer buf = new DynamicDataBuffer();
+            buf.setReadableBytes(((ChannelBuffer) msg).array());
+            
+            byte opcode = buf.readByte();
+            
+            final MessageCodec<? extends Message> codec = CodecResolver
                     .getCodec(opcode);
             
             if (codec == null)
             {
                 System.err.println("Error. Unrecognized opcode '" + opcode
-                        + "' : " + message);
+                        + "'");
                 return null;
             }
             
-            return codec.decode(ctx, channel, root);
+            return codec.decode(buf);
         }
         
         return msg;

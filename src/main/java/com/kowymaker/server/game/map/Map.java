@@ -18,9 +18,9 @@ package com.kowymaker.server.game.map;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.kowymaker.server.core.net.msg.Message;
 import com.kowymaker.server.game.players.Player;
 import com.kowymaker.server.utils.Location;
+import com.kowymaker.spec.net.msg.Message;
 
 public class Map
 {

@@ -16,6 +16,8 @@
 package com.kowymaker.server.core;
 
 import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
@@ -26,7 +28,10 @@ import org.jboss.netty.channel.group.DefaultChannelGroup;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 import com.kowymaker.server.KowyMakerServer;
+import com.kowymaker.server.core.net.handlers.ConnectHandler;
+import com.kowymaker.server.core.net.handlers.DisconnectHandler;
 import com.kowymaker.server.core.tasks.TaskManager;
+import com.kowymaker.spec.net.CodecResolver;
 
 public class Server
 {
@@ -82,10 +87,26 @@ public class Server
         return channel;
     }
     
+    @SuppressWarnings("unchecked")
     public void start()
     {
         logger.info("Starting server...");
         
+        //Register handlers
+        Map<String, Object> handlerProperties = new HashMap<String, Object>();
+        handlerProperties.put("server", this);
+        
+        try
+        {
+            CodecResolver.registerHandler(handlerProperties,
+                    ConnectHandler.class, DisconnectHandler.class);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        
+        //Start server
         bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(
                 Executors.newCachedThreadPool(),
                 Executors.newCachedThreadPool()));

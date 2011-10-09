@@ -8,12 +8,12 @@ import org.jboss.netty.channel.UpstreamMessageEvent;
 import com.kowymaker.server.KowyMakerServer;
 import com.kowymaker.server.annotations.Command;
 import com.kowymaker.server.console.ServerConsole;
-import com.kowymaker.server.core.net.codec.CodecResolver;
-import com.kowymaker.server.core.net.handlers.MessageHandler;
-import com.kowymaker.server.core.net.msg.DisconnectMessage;
 import com.kowymaker.server.core.tasks.Task;
 import com.kowymaker.server.game.players.Player;
 import com.kowymaker.server.interfaces.CommandSender;
+import com.kowymaker.spec.net.CodecResolver;
+import com.kowymaker.spec.net.MessageHandler;
+import com.kowymaker.spec.net.msg.DisconnectMessage;
 
 /**
  * Basics commands for the server: stop, say and stress (others will be
@@ -36,7 +36,6 @@ public class BasicCommands
         return false;
     }
     
-    @SuppressWarnings("unchecked")
     @Command(aliases = { "stress" }, desc = "Execute a stress test to determine server tasks executing speed", max = 1, usage = "/<command> [num of tasks]")
     public static boolean stress(KowyMakerServer main, CommandContext command,
             CommandSender sender)
@@ -56,9 +55,9 @@ public class BasicCommands
         for (int i = 0; i < num; i++)
         {
             final DisconnectMessage msg = new DisconnectMessage();
-            msg.setPlayer("StressTest");
+            msg.setName("StressTest");
             final MessageHandler<DisconnectMessage> handler = (MessageHandler<DisconnectMessage>) CodecResolver
-                    .getHandler("disconnect");
+                    .getHandler(DisconnectMessage.class);
             
             final MessageEvent event = new UpstreamMessageEvent(main
                     .getServer().getChannel(), msg, new InetSocketAddress(6563));

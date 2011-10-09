@@ -23,11 +23,11 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
-import com.kowymaker.server.core.net.codec.CodecResolver;
-import com.kowymaker.server.core.net.handlers.MessageHandler;
-import com.kowymaker.server.core.net.msg.Message;
 import com.kowymaker.server.core.tasks.Task;
 import com.kowymaker.server.game.players.Player;
+import com.kowymaker.spec.net.CodecResolver;
+import com.kowymaker.spec.net.MessageHandler;
+import com.kowymaker.spec.net.msg.Message;
 
 public class ServerHandler extends SimpleChannelUpstreamHandler
 {

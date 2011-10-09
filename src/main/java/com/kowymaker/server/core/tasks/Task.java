@@ -19,8 +19,8 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
 
 import com.kowymaker.server.core.Server;
-import com.kowymaker.server.core.net.handlers.MessageHandler;
-import com.kowymaker.server.core.net.msg.Message;
+import com.kowymaker.spec.net.MessageHandler;
+import com.kowymaker.spec.net.msg.Message;
 
 public class Task
 {

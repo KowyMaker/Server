@@ -18,15 +18,14 @@ package com.kowymaker.server.core.net.handlers;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
 
-import com.kowymaker.server.core.Server;
-import com.kowymaker.server.core.net.msg.DisconnectMessage;
+import com.kowymaker.spec.net.msg.DisconnectMessage;
 
-public class DisconnectHandler extends MessageHandler<DisconnectMessage>
+public class DisconnectHandler extends ServerMessageHandler<DisconnectMessage>
 {
     
     @Override
-    public boolean handle(Server server, ChannelHandlerContext ctx,
-            MessageEvent e, DisconnectMessage msg) throws Exception
+    public boolean handle(ChannelHandlerContext ctx, MessageEvent e,
+            DisconnectMessage msg)
     {
         server.getChannels().write(msg);
         return true;

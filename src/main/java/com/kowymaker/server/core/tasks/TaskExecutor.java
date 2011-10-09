@@ -29,8 +29,7 @@ public class TaskExecutor implements Runnable
     {
         try
         {
-            task.getHandler().handle(task.getServer(), task.getContext(),
-                    task.getEvent());
+            task.getHandler().handle(task.getContext(), task.getEvent());
             task.setExecuted(true);
         }
         catch (final Exception e)

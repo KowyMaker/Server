@@ -17,12 +17,11 @@ package com.kowymaker.server.game.players;
 
 import org.jboss.netty.channel.Channel;
 
-import com.kowymaker.server.core.net.msg.ChatMessage;
-import com.kowymaker.server.core.net.msg.Message;
 import com.kowymaker.server.data.Mergeable;
 import com.kowymaker.server.game.map.Map;
 import com.kowymaker.server.interfaces.CommandSender;
 import com.kowymaker.server.utils.Location;
+import com.kowymaker.spec.net.msg.Message;
 
 public class Player implements CommandSender,
         Mergeable<com.kowymaker.server.data.classes.Player>
@@ -80,10 +79,10 @@ public class Player implements CommandSender,
     @Override
     public void sendMessage(String message)
     {
-        final ChatMessage msg = new ChatMessage();
-        msg.setMessage(message);
-        
-        channel.write(msg);
+//        final ChatMessage msg = new ChatMessage();
+//        msg.setMessage(message);
+//        
+//        channel.write(msg);
     }
     
     @Override
