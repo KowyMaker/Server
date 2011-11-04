@@ -31,7 +31,7 @@ public class ServerConsole implements CommandSender
         thread.setDaemon(true);
         thread.start();
         
-        ConsoleOutputManager.register();
+        ConsoleOutputManager.register("server");
     }
     
     public boolean isRunning()

@@ -79,10 +79,10 @@ public class Player implements CommandSender,
     @Override
     public void sendMessage(String message)
     {
-//        final ChatMessage msg = new ChatMessage();
-//        msg.setMessage(message);
-//        
-//        channel.write(msg);
+        //        final ChatMessage msg = new ChatMessage();
+        //        msg.setMessage(message);
+        //        
+        //        channel.write(msg);
     }
     
     @Override
@@ -129,6 +129,8 @@ public class Player implements CommandSender,
     @Override
     public void merge(com.kowymaker.server.data.classes.Player data)
     {
-        
+        name = data.getName();
+        location = new Location(Integer.parseInt(data.getX()),
+                Integer.parseInt(data.getY()), Integer.parseInt(data.getZ()));
     }
 }
