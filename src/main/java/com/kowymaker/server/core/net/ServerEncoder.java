@@ -20,6 +20,7 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 
+import com.kowymaker.server.core.Server;
 import com.kowymaker.spec.net.CodecResolver;
 import com.kowymaker.spec.net.codec.MessageCodec;
 import com.kowymaker.spec.net.msg.Message;
@@ -28,6 +29,13 @@ import com.kowymaker.spec.utils.data.DynamicDataBuffer;
 
 public class ServerEncoder extends OneToOneEncoder
 {
+    private final Server server;
+    
+    public ServerEncoder(Server server)
+    {
+        super();
+        this.server = server;
+    }
     
     @SuppressWarnings({ "unchecked" })
     @Override
@@ -37,8 +45,8 @@ public class ServerEncoder extends OneToOneEncoder
         if (msg instanceof Message)
         {
             final Message message = (Message) msg;
-            final MessageCodec<Message> codec = (MessageCodec<Message>) CodecResolver
-                    .getCodec(message.getClass());
+            final MessageCodec<Message> codec = (MessageCodec<Message>) server
+                    .getCodec().getCodec(message.getClass());
             
             if (codec == null)
             {

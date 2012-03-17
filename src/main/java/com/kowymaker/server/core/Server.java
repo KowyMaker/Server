@@ -39,8 +39,12 @@ public class Server
                                                    .getName());
     
     private final KowyMakerServer main;
+    
     private final int             port;
+    
     private final TaskManager     tasks;
+    private final CodecResolver   codec    = new CodecResolver();
+    
     private ServerBootstrap       bootstrap;
     private Channel               channel;
     private final ChannelGroup    channels = new DefaultChannelGroup();
@@ -87,26 +91,31 @@ public class Server
         return channel;
     }
     
+    public CodecResolver getCodec()
+    {
+        return codec;
+    }
+    
     @SuppressWarnings("unchecked")
     public void start()
     {
         logger.info("Starting server...");
         
-        //Register handlers
+        // Register handlers
         Map<String, Object> handlerProperties = new HashMap<String, Object>();
         handlerProperties.put("server", this);
         
         try
         {
-            CodecResolver.registerHandler(handlerProperties,
-                    ConnectHandler.class, DisconnectHandler.class);
+            codec.registerHandler(handlerProperties, ConnectHandler.class,
+                    DisconnectHandler.class);
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
         
-        //Start server
+        // Start server
         bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(
                 Executors.newCachedThreadPool(),
                 Executors.newCachedThreadPool()));

@@ -41,8 +41,8 @@ public class ServerPipelineFactory implements ChannelPipelineFactory
         pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192,
                 Delimiters.nulDelimiter()));
         
-        pipeline.addLast("decoder", new ServerDecoder());
-        pipeline.addLast("encoder", new ServerEncoder());
+        pipeline.addLast("decoder", new ServerDecoder(server));
+        pipeline.addLast("encoder", new ServerEncoder(server));
         
         pipeline.addLast("handler", new ServerHandler(server));
         

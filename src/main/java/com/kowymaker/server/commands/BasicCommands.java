@@ -60,8 +60,8 @@ public class BasicCommands
         {
             final DisconnectMessage msg = new DisconnectMessage();
             msg.setName("StressTest");
-            final MessageHandler<DisconnectMessage> handler = (MessageHandler<DisconnectMessage>) CodecResolver
-                    .getHandler(DisconnectMessage.class);
+            final MessageHandler<DisconnectMessage> handler = (MessageHandler<DisconnectMessage>) main
+                    .getServer().getCodec().getHandler(DisconnectMessage.class);
             
             final MessageEvent event = new UpstreamMessageEvent(main
                     .getServer().getChannel(), msg, new InetSocketAddress(6563));
@@ -154,7 +154,7 @@ public class BasicCommands
                 }
                 sb.append("  :  ");
                 sb.append(descs.get(i));
-                if(i < commands.size() - 1)
+                if (i < commands.size() - 1)
                 {
                     sb.append(SystemUtils.getSystemOS().getLineSeparator());
                 }
@@ -165,7 +165,7 @@ public class BasicCommands
         {
             String c = command.getString(0);
             Method method = main.getCommandsManager().getAliases().get(c);
-            if(method != null)
+            if (method != null)
             {
                 Command cmd = method.getAnnotation(Command.class);
                 sender.sendMessage("Usage: "

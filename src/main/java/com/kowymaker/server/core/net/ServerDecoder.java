@@ -19,6 +19,8 @@ import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
+
+import com.kowymaker.server.core.Server;
 import com.kowymaker.spec.net.CodecResolver;
 import com.kowymaker.spec.net.codec.MessageCodec;
 import com.kowymaker.spec.net.msg.Message;
@@ -27,6 +29,13 @@ import com.kowymaker.spec.utils.data.DynamicDataBuffer;
 
 public class ServerDecoder extends OneToOneDecoder
 {
+    private final Server server;
+    
+    public ServerDecoder(Server server)
+    {
+        super();
+        this.server = server;
+    }
     
     @Override
     protected Object decode(ChannelHandlerContext ctx, Channel channel,
@@ -39,7 +48,7 @@ public class ServerDecoder extends OneToOneDecoder
             
             byte opcode = buf.readByte();
             
-            final MessageCodec<? extends Message> codec = CodecResolver
+            final MessageCodec<? extends Message> codec = server.getCodec()
                     .getCodec(opcode);
             
             if (codec == null)

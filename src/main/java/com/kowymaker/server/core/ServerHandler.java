@@ -52,8 +52,8 @@ public class ServerHandler extends SimpleChannelUpstreamHandler
         }
         
         final Message msg = (Message) e.getMessage();
-        final MessageHandler<Message> handler = (MessageHandler<Message>) CodecResolver
-                .getHandler(msg.getClass());
+        final MessageHandler<Message> handler = (MessageHandler<Message>) server
+                .getCodec().getHandler(msg.getClass());
         
         final Task task = new Task(server, ctx, e, msg, handler);
         server.getTasks().add(task);

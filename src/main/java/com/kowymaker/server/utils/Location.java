@@ -15,8 +15,12 @@
  */
 package com.kowymaker.server.utils;
 
-public class Location
+import java.io.Serializable;
+
+public class Location implements Serializable
 {
+    private static final long serialVersionUID = -6878961175493025516L;
+    
     private int         x;
     private int         y;
     private int         z;

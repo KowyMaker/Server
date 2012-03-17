@@ -21,29 +21,23 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.kowymaker.server.utils.Location;
+
 @Entity
 @Table(name = "players")
 public class Player
 {
     @Id
     @Column(name = "id")
-    private long   id;
+    private int      id;
     
     @Basic
     @Column(name = "name")
-    private String name;
+    private String   name;
     
     @Basic
-    @Column(name = "x")
-    private String x;
-    
-    @Basic
-    @Column(name = "y")
-    private String y;
-    
-    @Basic
-    @Column(name = "z")
-    private String z;
+    @Column(name = "location")
+    private Location location;
     
     public long getId()
     {
@@ -65,33 +59,13 @@ public class Player
         this.name = name;
     }
     
-    public String getX()
+    public Location getLocation()
     {
-        return x;
+        return location;
     }
     
-    public void setX(String x)
+    public void setLocation(Location location)
     {
-        this.x = x;
-    }
-    
-    public String getY()
-    {
-        return y;
-    }
-    
-    public void setY(String y)
-    {
-        this.y = y;
-    }
-    
-    public String getZ()
-    {
-        return z;
-    }
-    
-    public void setZ(String z)
-    {
-        this.z = z;
+        this.location = location;
     }
 }
