@@ -18,11 +18,10 @@ package com.kowymaker.server.core;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
-import org.jboss.netty.handler.codec.frame.DelimiterBasedFrameDecoder;
-import org.jboss.netty.handler.codec.frame.Delimiters;
 
 import com.kowymaker.server.core.net.ServerDecoder;
 import com.kowymaker.server.core.net.ServerEncoder;
+import com.kowymaker.spec.net.CodecFrameDecoder;
 
 public class ServerPipelineFactory implements ChannelPipelineFactory
 {
@@ -33,13 +32,11 @@ public class ServerPipelineFactory implements ChannelPipelineFactory
         this.server = server;
     }
     
-    @Override
     public ChannelPipeline getPipeline() throws Exception
     {
         final ChannelPipeline pipeline = Channels.pipeline();
         
-        pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192,
-                Delimiters.nulDelimiter()));
+        pipeline.addLast("framer", new CodecFrameDecoder());
         
         pipeline.addLast("decoder", new ServerDecoder(server));
         pipeline.addLast("encoder", new ServerEncoder(server));

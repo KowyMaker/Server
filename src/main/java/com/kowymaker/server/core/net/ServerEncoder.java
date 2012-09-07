@@ -15,17 +15,13 @@
  */
 package com.kowymaker.server.core.net;
 
-import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 
+import com.google.protobuf.Message;
 import com.kowymaker.server.core.Server;
-import com.kowymaker.spec.net.CodecResolver;
-import com.kowymaker.spec.net.codec.MessageCodec;
-import com.kowymaker.spec.net.msg.Message;
 import com.kowymaker.spec.utils.data.DataBuffer;
-import com.kowymaker.spec.utils.data.DynamicDataBuffer;
 
 public class ServerEncoder extends OneToOneEncoder
 {
@@ -37,7 +33,6 @@ public class ServerEncoder extends OneToOneEncoder
         this.server = server;
     }
     
-    @SuppressWarnings({ "unchecked" })
     @Override
     protected Object encode(ChannelHandlerContext ctx, Channel channel,
             Object msg) throws Exception
@@ -45,20 +40,21 @@ public class ServerEncoder extends OneToOneEncoder
         if (msg instanceof Message)
         {
             final Message message = (Message) msg;
-            final MessageCodec<Message> codec = (MessageCodec<Message>) server
-                    .getCodec().getCodec(message.getClass());
             
-            if (codec == null)
+            int opcode = server.getCodec().getOpcode(message.getClass());
+            
+            if (opcode != -1)
             {
-                throw new NullPointerException("codec");
+                DataBuffer data = new DataBuffer();
+                data.writeByte(opcode);
+                data.writeBytes(message.toByteArray());
+                
+                DataBuffer buf = new DataBuffer();
+                buf.writeInt(data.size());
+                buf.writeBytes(data);
+                
+                return buf;
             }
-            
-            DataBuffer buf = new DynamicDataBuffer();
-            buf.writeByte(codec.getOpcode());
-            codec.encode(buf, message);
-            buf.copyWritedBytesToReadableBytes();
-            
-            return ChannelBuffers.copiedBuffer(buf.getReadableBytes());
         }
         
         return null;

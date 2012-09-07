@@ -20,14 +20,20 @@ import java.util.List;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
 
+import com.kowymaker.server.core.Server;
 import com.kowymaker.server.game.players.Player;
-import com.kowymaker.spec.net.msg.ConnectMessage;
+import com.kowymaker.spec.proto.NetworkCodecs;
 
-public class ConnectHandler extends ServerMessageHandler<ConnectMessage>
+public class ConnectHandler extends ServerMessageHandler<NetworkCodecs.ConnectMessage>
 {
+    public ConnectHandler(Server server)
+    {
+        super(server);
+    }
+    
     @Override
-    public boolean handle(ChannelHandlerContext ctx,
-            MessageEvent e, ConnectMessage msg)
+    public boolean handle(ChannelHandlerContext ctx, MessageEvent e,
+            NetworkCodecs.ConnectMessage msg)
     {
         final Player player = new Player(e.getChannel());
         player.setName(msg.getName());

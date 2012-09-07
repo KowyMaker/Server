@@ -16,8 +16,6 @@
 package com.kowymaker.server.core;
 
 import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
@@ -32,6 +30,7 @@ import com.kowymaker.server.core.net.handlers.ConnectHandler;
 import com.kowymaker.server.core.net.handlers.DisconnectHandler;
 import com.kowymaker.server.core.tasks.TaskManager;
 import com.kowymaker.spec.net.CodecResolver;
+import com.kowymaker.spec.proto.NetworkCodecs;
 
 public class Server
 {
@@ -96,24 +95,15 @@ public class Server
         return codec;
     }
     
-    @SuppressWarnings("unchecked")
     public void start()
     {
         logger.info("Starting server...");
         
         // Register handlers
-        Map<String, Object> handlerProperties = new HashMap<String, Object>();
-        handlerProperties.put("server", this);
-        
-        try
-        {
-            codec.registerHandler(handlerProperties, ConnectHandler.class,
-                    DisconnectHandler.class);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        codec.registerHandler(NetworkCodecs.ConnectMessage.class,
+                new ConnectHandler(this));
+        codec.registerHandler(NetworkCodecs.DisconnectMessage.class,
+                new DisconnectHandler(this));
         
         // Start server
         bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(

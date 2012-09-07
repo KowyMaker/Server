@@ -16,16 +16,14 @@
 package com.kowymaker.server.core.net;
 
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBufferInputStream;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 
+import com.google.protobuf.Message;
 import com.kowymaker.server.core.Server;
-import com.kowymaker.spec.net.CodecResolver;
-import com.kowymaker.spec.net.codec.MessageCodec;
-import com.kowymaker.spec.net.msg.Message;
 import com.kowymaker.spec.utils.data.DataBuffer;
-import com.kowymaker.spec.utils.data.DynamicDataBuffer;
 
 public class ServerDecoder extends OneToOneDecoder
 {
@@ -43,22 +41,20 @@ public class ServerDecoder extends OneToOneDecoder
     {
         if (msg instanceof ChannelBuffer)
         {
-            DataBuffer buf = new DynamicDataBuffer();
-            buf.setReadableBytes(((ChannelBuffer) msg).array());
+            DataBuffer buf = new DataBuffer((ChannelBuffer) msg);
             
             byte opcode = buf.readByte();
             
-            final MessageCodec<? extends Message> codec = server.getCodec()
-                    .getCodec(opcode);
-            
-            if (codec == null)
+            Message.Builder messageBuilder = server.getCodec().getCodec(opcode);
+            if (messageBuilder == null)
             {
                 System.err.println("Error. Unrecognized opcode '" + opcode
                         + "'");
                 return null;
             }
             
-            return codec.decode(buf);
+            return messageBuilder.mergeFrom(new ChannelBufferInputStream(buf))
+                    .build();
         }
         
         return msg;

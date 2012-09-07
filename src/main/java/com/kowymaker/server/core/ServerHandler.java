@@ -23,11 +23,11 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
+import com.google.protobuf.MessageLite;
+import com.google.protobuf.MessageOrBuilder;
 import com.kowymaker.server.core.tasks.Task;
 import com.kowymaker.server.game.players.Player;
-import com.kowymaker.spec.net.CodecResolver;
 import com.kowymaker.spec.net.MessageHandler;
-import com.kowymaker.spec.net.msg.Message;
 
 public class ServerHandler extends SimpleChannelUpstreamHandler
 {
@@ -41,19 +41,18 @@ public class ServerHandler extends SimpleChannelUpstreamHandler
         this.server = server;
     }
     
-    @SuppressWarnings("unchecked")
     @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
             throws Exception
     {
-        if (!(e.getMessage() instanceof Message))
+        if (!(e.getMessage() instanceof MessageLite))
         {
             super.messageReceived(ctx, e);
         }
         
-        final Message msg = (Message) e.getMessage();
-        final MessageHandler<Message> handler = (MessageHandler<Message>) server
-                .getCodec().getHandler(msg.getClass());
+        final MessageOrBuilder msg = (MessageOrBuilder) e.getMessage();
+        final MessageHandler<?> handler = server.getCodec().getHandler(
+                msg.getClass());
         
         final Task task = new Task(server, ctx, e, msg, handler);
         server.getTasks().add(task);

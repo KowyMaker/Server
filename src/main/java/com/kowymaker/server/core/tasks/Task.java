@@ -18,22 +18,22 @@ package com.kowymaker.server.core.tasks;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
 
+import com.google.protobuf.MessageOrBuilder;
 import com.kowymaker.server.core.Server;
 import com.kowymaker.spec.net.MessageHandler;
-import com.kowymaker.spec.net.msg.Message;
 
 public class Task
 {
-    private final Server                            server;
-    private final ChannelHandlerContext             context;
-    private final MessageEvent                      event;
-    private final Message                           message;
-    private final MessageHandler<? extends Message> handler;
-    private boolean                                 executed = false;
+    private final Server                server;
+    private final ChannelHandlerContext context;
+    private final MessageEvent          event;
+    private final MessageOrBuilder      message;
+    private final MessageHandler<?>     handler;
+    private boolean                     executed = false;
     
     public Task(Server server, ChannelHandlerContext context,
-            MessageEvent event, Message message,
-            MessageHandler<? extends Message> handler)
+            MessageEvent event, MessageOrBuilder message,
+            MessageHandler<?> handler)
     {
         this.server = server;
         this.context = context;
@@ -57,12 +57,12 @@ public class Task
         return event;
     }
     
-    public Message getMessage()
+    public MessageOrBuilder getMessage()
     {
         return message;
     }
     
-    public MessageHandler<? extends Message> getHandler()
+    public MessageHandler<?> getHandler()
     {
         return handler;
     }

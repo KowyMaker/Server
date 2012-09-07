@@ -27,8 +27,8 @@ import com.kowymaker.server.console.ServerConsole;
 import com.kowymaker.server.core.Server;
 import com.kowymaker.server.data.Database;
 import com.kowymaker.server.game.Game;
+import com.kowymaker.server.utils.Constants;
 import com.kowymaker.spec.utils.Configuration;
-import com.kowymaker.spec.utils.Version;
 
 /**
  * @author Koka El Kiwi
@@ -36,14 +36,13 @@ import com.kowymaker.spec.utils.Version;
  */
 public class KowyMakerServer
 {
-    public static final Version APP_VERSION = new Version(0, 1, 0);
-    private final Configuration config      = new Configuration();
+    private final Configuration config  = new Configuration();
     private Server              server;
     private ServerConsole       console;
     private Game                game;
     private Database            database;
     private CommandsManager     commandsManager;
-    private boolean             running     = true;
+    private boolean             running = true;
     
     /**
      * Initialize configuration and parse args.
@@ -95,7 +94,8 @@ public class KowyMakerServer
         }
         else if (options.has("v"))
         {
-            System.out.println("Kowy Maker - Server [v " + APP_VERSION + "]");
+            System.out.println("Kowy Maker - Server [v " + Constants.VERSION
+                    + "]");
             System.exit(0);
         }
         
@@ -118,8 +118,8 @@ public class KowyMakerServer
      */
     public void init() throws Exception
     {
-        System.out
-                .println("Starting Kowy Maker Server v" + APP_VERSION + "...");
+        System.out.println("Starting Kowy Maker Server v" + Constants.VERSION
+                + "...");
         
         // Initialize contents
         console = new ServerConsole(this);

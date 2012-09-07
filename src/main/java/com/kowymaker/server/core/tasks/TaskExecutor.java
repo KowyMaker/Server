@@ -24,7 +24,6 @@ public class TaskExecutor implements Runnable
         this.task = task;
     }
     
-    @Override
     public void run()
     {
         try

@@ -18,9 +18,9 @@ package com.kowymaker.server.game.map;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.protobuf.MessageLite;
 import com.kowymaker.server.game.players.Player;
 import com.kowymaker.server.utils.Location;
-import com.kowymaker.spec.net.msg.Message;
 
 public class Map
 {
@@ -77,7 +77,7 @@ public class Map
         return null;
     }
     
-    public void sendMessage(Message msg)
+    public void sendMessage(MessageLite msg)
     {
         for (final Player player : players)
         {

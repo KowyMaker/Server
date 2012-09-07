@@ -16,12 +16,13 @@
 package com.kowymaker.server.game.players;
 
 import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelFuture;
 
+import com.google.protobuf.MessageLite;
 import com.kowymaker.server.data.Mergeable;
 import com.kowymaker.server.game.map.Map;
 import com.kowymaker.server.interfaces.CommandSender;
 import com.kowymaker.server.utils.Location;
-import com.kowymaker.spec.net.msg.Message;
 
 public class Player implements CommandSender,
         Mergeable<com.kowymaker.server.data.classes.Player>
@@ -71,12 +72,27 @@ public class Player implements CommandSender,
         this.map = map;
     }
     
-    public void sendMessage(Message msg)
+    public boolean sendMessage(MessageLite msg)
     {
-        channel.write(msg);
+        boolean result = false;
+        
+        ChannelFuture future = channel.write(msg);
+        try
+        {
+            future.await(30000L);
+            if (future.isSuccess())
+            {
+                result = true;
+            }
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+        
+        return result;
     }
     
-    @Override
     public void sendMessage(String message)
     {
         // final ChatMessage msg = new ChatMessage();
@@ -126,7 +142,6 @@ public class Player implements CommandSender,
         return true;
     }
     
-    @Override
     public void merge(com.kowymaker.server.data.classes.Player data)
     {
         name = data.getName();

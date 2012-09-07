@@ -8,15 +8,15 @@ import java.util.List;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.UpstreamMessageEvent;
 
+import com.google.protobuf.Message;
 import com.kowymaker.server.KowyMakerServer;
 import com.kowymaker.server.annotations.Command;
 import com.kowymaker.server.console.ServerConsole;
 import com.kowymaker.server.core.tasks.Task;
 import com.kowymaker.server.game.players.Player;
 import com.kowymaker.server.interfaces.CommandSender;
-import com.kowymaker.spec.net.CodecResolver;
 import com.kowymaker.spec.net.MessageHandler;
-import com.kowymaker.spec.net.msg.DisconnectMessage;
+import com.kowymaker.spec.proto.NetworkCodecs;
 import com.kowymaker.spec.utils.SystemUtils;
 
 /**
@@ -58,10 +58,12 @@ public class BasicCommands
         final long start = System.currentTimeMillis();
         for (int i = 0; i < num; i++)
         {
-            final DisconnectMessage msg = new DisconnectMessage();
-            msg.setName("StressTest");
-            final MessageHandler<DisconnectMessage> handler = (MessageHandler<DisconnectMessage>) main
-                    .getServer().getCodec().getHandler(DisconnectMessage.class);
+            Message msg = NetworkCodecs.DisconnectMessage.newBuilder()
+                    .setName("Blob").build();
+            
+            final MessageHandler<NetworkCodecs.DisconnectMessage> handler = main
+                    .getServer().getCodec()
+                    .getHandler(NetworkCodecs.DisconnectMessage.class);
             
             final MessageEvent event = new UpstreamMessageEvent(main
                     .getServer().getChannel(), msg, new InetSocketAddress(6563));
