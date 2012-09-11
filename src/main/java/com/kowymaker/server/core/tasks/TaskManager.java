@@ -15,17 +15,19 @@
  */
 package com.kowymaker.server.core.tasks;
 
+import java.util.Deque;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import com.google.common.collect.Queues;
 import com.kowymaker.server.core.Server;
 
 public class TaskManager extends Thread
 {
-    private final Server    server;
-    private final TaskQueue tasks  = new TaskQueue();
+    private final Server          server;
+    private final Deque<Runnable> tasks  = Queues.newArrayDeque();
     
-    Executor                worker = Executors.newCachedThreadPool();
+    Executor                      worker = Executors.newCachedThreadPool();
     
     public TaskManager(Server server)
     {
@@ -37,21 +39,26 @@ public class TaskManager extends Thread
     {
         while (server.isRunning())
         {
-            final Task task = tasks.remove();
+            final Runnable task = tasks.poll();
             if (task != null)
             {
-                final TaskExecutor executor = new TaskExecutor(task);
-                worker.execute(executor);
+                worker.execute(task);
             }
         }
     }
     
     public synchronized boolean add(Task task)
     {
+        TaskExecutor executor = new TaskExecutor(task);
+        return add(executor);
+    }
+    
+    public synchronized boolean add(Runnable task)
+    {
         boolean added = false;
         try
         {
-            added = tasks.add(task);
+            added = tasks.offer(task);
         }
         catch (final Exception e)
         {

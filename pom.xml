@@ -31,11 +31,16 @@
 			<artifactId>kowymaker-specification</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+		<dependency>
+		    <groupId>fm.void.jetm</groupId>
+		    <artifactId>jetm</artifactId>
+		    <version>1.2.3</version>
+		</dependency>
 	</dependencies>
     <repositories>
         <repository>
             <id>kiwi-jenkins-repo</id>
-            <url>http://ci.kokaelkiwi.eu:8080/plugin/repository/everything/</url>
+            <url>http://ci.kokaelkiwi.eu/plugin/repository/everything/</url>
         </repository>
     </repositories>
 	<build>

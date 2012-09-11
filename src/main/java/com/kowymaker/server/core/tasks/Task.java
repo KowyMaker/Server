@@ -29,7 +29,7 @@ public class Task
     private final MessageEvent          event;
     private final MessageOrBuilder      message;
     private final MessageHandler<?>     handler;
-    private boolean                     executed = false;
+    private boolean                     done = false;
     
     public Task(Server server, ChannelHandlerContext context,
             MessageEvent event, MessageOrBuilder message,
@@ -67,13 +67,13 @@ public class Task
         return handler;
     }
     
-    public boolean isExecuted()
+    public boolean done()
     {
-        return executed;
+        return done;
     }
     
-    public void setExecuted(boolean executed)
+    public void done(boolean done)
     {
-        this.executed = executed;
+        this.done = done;
     }
 }

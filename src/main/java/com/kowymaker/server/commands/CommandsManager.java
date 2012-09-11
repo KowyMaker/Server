@@ -35,6 +35,7 @@ public class CommandsManager
     {
         this.main = main;
         register(BasicCommands.class);
+        register(UtilsCommands.class);
     }
     
     public void register(Class<?> clazz)
